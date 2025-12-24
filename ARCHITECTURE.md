@@ -11,9 +11,9 @@ Mem0 is an **intelligent memory layer** for AI applications. It remembers user c
 
 ---
 
-## The Stack
+## The Stack (AWS-first)
 
-```
+```text
 ┌─────────────────────────────────────────────────┐
 │  Your Application (Chatbot, Agent, etc.)       │
 └────────────────┬────────────────────────────────┘
@@ -26,24 +26,24 @@ Mem0 is an **intelligent memory layer** for AI applications. It remembers user c
          │                      │
          │ Embeddings           │ Storage
          ▼                      ▼
-┌────────────────────┐  ┌──────────────────┐
-│  OpenAI API        │  │  Qdrant DB       │
-│  - LLM (gpt-4o)    │  │  - Vector Store  │
-│  - Embeddings      │  │  - Port 6333     │
-└────────────────────┘  └──────────────────┘
+┌──────────────────────────────┐  ┌──────────────────┐
+│  AWS Bedrock                 │  │  Qdrant DB       │
+│  - Titan embeddings (vectors)│  │  - Vector Store  │
+│  - Bedrock LLM (infer=true)  │  │  - Port 6333     │
+└──────────────────────────────┘  └──────────────────┘
 ```
 
 ---
 
-## Why OpenAI API Key?
+## Why Bedrock?
 
-Mem0 uses OpenAI for **two critical functions**:
+Mem0 uses Bedrock for **two critical functions**:
 
 ### 1. Creating Embeddings (Vector Representations)
 
 When you add a memory like "User loves pizza", Mem0:
 
-1. Sends text to OpenAI: `"User loves pizza"`
+1. Sends text to Bedrock Titan: `"User loves pizza"`
 2. Gets back a 1536-number vector: `[0.023, -0.15, 0.87, ...]`
 3. Stores vector in Qdrant for similarity search
 
@@ -52,9 +52,9 @@ When you add a memory like "User loves pizza", Mem0:
 - Query: "What food does the user like?"
 - Matches: "User loves pizza" (even though words differ!)
 
-### 2. Memory Extraction (Optional)
+### 2. Memory Extraction / Memory Actions (Optional but recommended)
 
-OpenAI's LLM analyzes conversations to extract key facts:
+When `infer=true`, a Bedrock LLM analyzes conversation text to extract key facts and decide what to store:
 
 - Input: Chat transcript
 - Output: "User's name is Alice. Lives in Austin. Prefers morning emails."
@@ -75,50 +75,18 @@ For production app with 1000 users:
 
 ---
 
-## Can We Use AWS Bedrock Instead?
+## Optional Provider: OpenAI
 
-**YES!** Mem0 supports multiple providers. Here's how:
-
-### Option 1: AWS Bedrock (Titan/Claude)
-
-This repo supports Bedrock **without code changes** (it’s controlled by `.env`).
-
-**AWS-only track (no OpenAI):**
+This repo supports OpenAI as an optional provider track (controlled by `.env`):
 
 ```bash
-# Switch providers
-LLM_PROVIDER=aws_bedrock
-EMBEDDER_PROVIDER=aws_bedrock
-
-# Pick models (examples)
-EMBEDDER_MODEL=amazon.titan-embed-text-v1
-LLM_MODEL=anthropic.claude-3-5-sonnet-20240620-v1:0
-
-# Region (must be Bedrock-enabled)
-AWS_REGION=us-east-1
-
-# Credentials (optional on EC2 if using an instance role)
-# AWS_ACCESS_KEY_ID=...
-# AWS_SECRET_ACCESS_KEY=...
-# AWS_SESSION_TOKEN=...
+# Use OpenAI instead of Bedrock
+LLM_PROVIDER=openai
+EMBEDDER_PROVIDER=openai
+OPENAI_API_KEY=...
 ```
 
-**Important:** On EC2, the cleanest approach is an **IAM role** on the instance with Bedrock permissions (no long-lived keys in `.env`).
-
-**Pros:**
-
-- No OpenAI dependency
-- Potentially lower cost at scale
-- AWS credits can be used
-- Data stays in AWS ecosystem
-
-**Cons:**
-
-- More complex AWS IAM setup
-- Need AWS account with Bedrock access
-- Different API quotas/limits
-
-### Option 2: Local Models (Ollama)
+## Optional Provider: Local models (Ollama)
 
 For **completely free** option:
 
@@ -175,11 +143,11 @@ For **completely free** option:
 **Q: Why not just use a SQL database?**  
 A: SQL finds exact matches. Vectors find similar meaning. "car accident" and "vehicle collision" are different text but similar meaning.
 
-**Q: What if OpenAI goes down?**  
-A: Your API still runs, but add/search operations will fail. That's why multi-provider support matters.
+**Q: What if Bedrock is unavailable or I don’t have model access?**  
+A: Your API can still run, but `add`/`search` may fail because embeddings/LLM calls can’t complete. For labs, the most common issue is missing Bedrock model access.
 
-**Q: Can I use free tier OpenAI?**  
-A: Yes! Free tier gives $5 credit, enough for ~500 lab sessions.
+**Q: Can I use OpenAI instead?**  
+A: Yes, OpenAI is an optional provider track (see `SETUP.md`).
 
 **Q: Is Qdrant the only vector DB?**  
 A: No. Mem0 also supports Pinecone, Weaviate, Milvus, Chroma. Qdrant is easiest to self-host.
@@ -190,10 +158,10 @@ A: No. Mem0 also supports Pinecone, Weaviate, Milvus, Chroma. Qdrant is easiest 
 
 **Teaching Tip:** Have students:
 
-1. Deploy with OpenAI (quick setup)
-2. Monitor costs at `/metrics` endpoint
-3. Discuss why vectors work for memory
-4. (Advanced) Swap to Bedrock as extension activity
+1. Deploy AWS-first with Terraform (fast path)
+2. Use Swagger UI to explore endpoints
+3. Discuss why embeddings + vector search work
+4. (Optional) Swap providers to OpenAI as an extension
 
 **Demo Idea:** Show students:
 
@@ -210,11 +178,11 @@ curl -X POST .../memories/search -d '{"query": "What car does the user have?"}'
 
 ## Resources
 
-- **Mem0 Docs**: https://docs.mem0.ai
-- **Supported Providers**: https://docs.mem0.ai/components/llms/overview
-- **Qdrant Docs**: https://qdrant.tech/documentation/
-- **Vector Search Explainer**: https://www.pinecone.io/learn/vector-embeddings/
+- **Mem0 Docs**: `https://docs.mem0.ai`
+- **Supported Providers**: `https://docs.mem0.ai/components/llms/overview`
+- **Qdrant Docs**: `https://qdrant.tech/documentation/`
+- **Vector Search Explainer**: `https://www.pinecone.io/learn/vector-embeddings/`
 
 ---
 
-**Bottom Line**: OpenAI is used because it's easy and high-quality. But you can swap it out for AWS Bedrock, local models, or other providers. The architecture is **provider-agnostic**.
+**Bottom Line**: This lab is AWS-first (Bedrock + Titan). OpenAI and local models remain optional provider tracks. The architecture is provider-agnostic.

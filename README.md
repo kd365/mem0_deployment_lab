@@ -2,7 +2,7 @@
 
 **Self-hosted memory layer with FastAPI + Qdrant vector database**
 
-> **Lab Objective:** Deploy a production-ready AI memory API in 30 minutes
+> **Lab Objective:** Deploy a production-ready AI memory API on AWS (Bedrock + Titan + Qdrant) in ~30 minutes
 
 ---
 
@@ -17,16 +17,18 @@ Your App → FastAPI (Port 8000) → Mem0 SDK → Qdrant (Vector DB)
 - REST API for AI memory management
 - Semantic search with vector embeddings
 - User isolation & session management
-- OpenAI **or** AWS Bedrock (optional track) for embeddings/LLM
+- AWS Bedrock (Titan embeddings + Bedrock LLM) for embeddings/LLM
+- OpenAI support (optional provider track)
 - Docker containerized deployment
 
 ---
 
 ## Prerequisites
 
-- AWS EC2 instance (t3.medium, Amazon Linux 2023)
-- OpenAI API key **or** AWS Bedrock access (optional AWS-only track)
-- Basic Docker knowledge
+- AWS account with Bedrock enabled in your region (and model access granted)
+- Terraform installed (recommended)
+- AWS credentials configured locally (AWS CLI, SSO, or assumed role)
+- (Optional) OpenAI API key if you choose the OpenAI provider track
 
 ---
 
@@ -35,7 +37,7 @@ Your App → FastAPI (Port 8000) → Mem0 SDK → Qdrant (Vector DB)
 ### 1. Start Here (Students)
 
 ```bash
-# Follow the step-by-step deployment guide
+# Follow the step-by-step deploy + test guide
 cat SETUP.md
 ```
 
@@ -55,9 +57,9 @@ Visit: `http://YOUR_EC2_IP:8000/docs`
 
 ```
 mem0_deployment_lab/
-├── SETUP.md              # START HERE (students): deploy to EC2
-├── API.md                # Students: endpoint reference + examples
-├── ARCHITECTURE.md       # Students: how it works + Bedrock alternative
+├── SETUP.md              # Students: deploy (Terraform recommended) + test
+├── API.md                # Students: Swagger + endpoint examples
+├── ARCHITECTURE.md       # Optional reading: how the stack works
 ├── LAB_GUIDE.md          # Instructors: lesson plan + timing + checkpoints
 ├── INSTRUCTOR_NOTES.txt  # Instructors: quick run-of-show + reminders
 ├── src/                  # FastAPI application
@@ -75,32 +77,31 @@ mem0_deployment_lab/
 | ---------- | ------------------------------- | ---- |
 | API Server | FastAPI + Mem0 SDK              | 8000 |
 | Vector DB  | Qdrant                          | 6333 |
-| Embeddings | OpenAI (text-embedding-3-small) | -    |
-| LLM        | OpenAI (gpt-4o-mini)            | -    |
+| Embeddings | AWS Bedrock (Titan)             | -    |
+| LLM        | AWS Bedrock (e.g., Claude)      | -    |
 
 ---
 
 ## Cost Estimate (Rough)
 
 - EC2 t3.medium: ~$30/month
-- OpenAI API: ~$0.01-0.05 per conversation
-- **Total: ~$35/month + usage**
+- Bedrock usage: varies by model and traffic (typically pennies for lab usage)
+- **Total: ~$30/month + model usage**
 
 ---
 
 ## Documentation
 
 - **Students (do in order)**
-  - `SETUP.md`: deploy the stack + configure `.env`
-  - `test_api.sh`: run smoke tests against the API
-  - `API.md`: copy/paste examples for each endpoint
-  - `ARCHITECTURE.md`: understand why we need an LLM/embeddings + Bedrock option
+  - `SETUP.md`: deploy + verify (Terraform recommended)
+  - `API.md`: Swagger + copy/paste examples for each endpoint
+  - `test_api.sh`: smoke tests against the API
+  - `ARCHITECTURE.md` (optional): understand embeddings, vector DBs, and Mem0’s infer pipeline
 - **Instructors**
   - `LAB_GUIDE.md`: structure, timing, checkpoints, extensions
   - `INSTRUCTOR_NOTES.txt`: quick reminders and common student pitfalls
-- **Infrastructure (optional)**
-  - `infra/README.md`: Terraform overview
-  - `infra/terraform/README.md`: one-command AWS deploy (`terraform apply`)
+- **Infrastructure**
+  - `infra/terraform/README.md`: Terraform details (inputs/outputs, what gets created)
 - **Interactive docs**
   - Swagger UI: `http://your-server:8000/docs`
 
@@ -113,4 +114,4 @@ mem0_deployment_lab/
 
 ---
 
-**Ready to deploy?** → Open `SETUP.md`
+**Ready to deploy?** Open `SETUP.md`

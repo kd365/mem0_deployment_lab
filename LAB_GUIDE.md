@@ -13,7 +13,7 @@
 By the end of this lab, students will be able to:
 1. Deploy a containerized FastAPI application to AWS EC2
 2. Configure and run a Qdrant vector database
-3. Integrate OpenAI embeddings for semantic search
+3. Integrate AWS Bedrock (Titan embeddings + Bedrock LLM) for semantic memory
 4. Test RESTful API endpoints
 5. Use Swagger UI for API exploration
 
@@ -22,20 +22,16 @@ By the end of this lab, students will be able to:
 ## Lab Structure
 
 ### Part 1: Environment Setup (20 min)
-- Connect to EC2
-- Install Docker & Docker Compose
-- Upload project files
+- Deploy with Terraform (recommended)
+- (Optional) SSH to EC2 to observe containers/logs
 
 ### Part 2: Configuration (10 min)
-- Configure environment variables
-- Generate API keys
-- Understand configuration options
+- Understand `.env` settings (providers/models/region)
+- Understand API key auth and where keys are stored (Terraform outputs / SSM)
 
 ### Part 3: Docker Deployment (15 min)
-- Build custom Docker image
-- Start Qdrant database
-- Start FastAPI application
-- Verify deployment
+- Observe the running services (FastAPI + Qdrant)
+- Verify `/health` and containers/logs
 
 ### Part 4: Testing & Exploration (25 min)
 - Run test script
@@ -83,7 +79,7 @@ By the end of this lab, students will be able to:
 **Solution:** Check EC2 security group - port 8000 must be open
 
 ### Issue 3: "OpenAI API error"
-**Solution:** Verify OPENAI_API_KEY is set correctly in .env
+**Solution:** If using OpenAI track, verify OPENAI_API_KEY is set correctly. Otherwise (AWS track), verify Bedrock model access and IAM permissions.
 
 ### Issue 4: "Container keeps restarting"
 **Solution:** Check logs with `sudo docker logs mem0_api`
@@ -136,13 +132,13 @@ For students who finish early:
 ### Medium Extensions
 1. Write a Python script to integrate with the API
 2. Explore Qdrant dashboard at port 6333
-3. Monitor OpenAI costs via /metrics endpoint
+3. Discuss model usage/costs and how to monitor usage (CloudWatch/Billing + app metrics)
 
 ### Advanced Extensions
 1. Modify the FastAPI code to add a custom endpoint
 2. Set up nginx reverse proxy with SSL
 3. Implement rate limiting
-4. **AWS-only track**: switch embeddings + LLM to **AWS Bedrock** (Titan + Claude) by editing `.env` (see `SETUP.md` optional track and `ARCHITECTURE.md`)
+4. Optional provider swap: switch to OpenAI by editing `.env` (see `SETUP.md`)
 
 ---
 
@@ -215,12 +211,12 @@ sudo docker system prune -a
 1. Provision EC2 instances for students
 2. Ensure security groups have ports 22, 8000 open
 3. Test deployment on one instance
-4. Have OpenAI API key ready (or students bring their own)
+4. Ensure Bedrock model access is enabled in your AWS account/region
 
 ### Materials Needed
 - EC2 SSH keys (one per student)
 - This repository URL or zip file
-- OpenAI API keys
+- AWS account access with Bedrock enabled (and model access granted)
 - Projected screen for demos
 
 ---
@@ -244,7 +240,7 @@ sudo docker system prune -a
 
 **Per Student:**
 - EC2 t3.medium: $0.0416/hour × 2 hours = $0.08
-- OpenAI API: ~$0.01 for testing
+- Bedrock usage: varies by model and traffic (typically pennies for lab usage)
 - **Total: ~$0.10 per student**
 
 **For 30 students:** ~$3.00 total
@@ -256,11 +252,11 @@ sudo docker system prune -a
 ## Success Criteria
 
 Students should be able to:
-- ✅ Deploy the full stack independently
-- ✅ Successfully add and search memories
-- ✅ Explain the architecture
-- ✅ Use the Swagger UI
-- ✅ Troubleshoot basic issues
+- Deploy the full stack independently
+- Successfully add and search memories
+- Explain the architecture
+- Use the Swagger UI
+- Troubleshoot basic issues
 
 ---
 

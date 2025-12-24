@@ -104,7 +104,7 @@ def get_mem0_config():
             "provider": embedder_provider,
             "config": (
                 {
-                    # OpenAI embeddings (default)
+                    # OpenAI embeddings (optional provider track)
                     "model": os.getenv("EMBEDDER_MODEL", "text-embedding-3-small"),
                     "api_key": openai_api_key,
                     "openai_base_url": os.getenv("OPENAI_BASE_URL") or None,

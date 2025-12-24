@@ -21,15 +21,21 @@ Click **Authorize** and set:
 
 Your Swagger key is the value of **`API_KEY`**.
 
-- **Manual setup (following `SETUP.md`)**: it’s in your local `.env` file:
+- **Terraform (recommended)**: grab it from Terraform outputs:
+
+```bash
+cd infra/terraform
+terraform output -raw api_key
+terraform output -raw admin_api_key
+```
+
+- **Manual setup**: it’s in your `.env` file on the EC2 instance:
 
 ```bash
 grep '^API_KEY=' .env
 ```
 
-- **Terraform setup (`infra/terraform`)**:
-  - On the EC2 instance: `/opt/<project_name>/repo/.env`
-  - Or from your laptop (AWS CLI):
+- **Terraform (alternative)**: it’s stored in SSM Parameter Store (AWS CLI):
 
 ```bash
 aws ssm get-parameter --with-decryption \

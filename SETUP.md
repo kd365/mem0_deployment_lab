@@ -1,137 +1,111 @@
-# Mem0 Stack Setup Guide
+# Mem0 Stack Setup Guide (AWS-first)
 
-**Deploy a self-hosted AI memory API in 8 steps**
+Deploy a self-hosted AI memory API on AWS using:
+
+- FastAPI + Mem0
+- Qdrant (vector DB)
+- AWS Bedrock: Titan embeddings + a Bedrock LLM
 
 ---
 
-## Step 1: Connect to EC2
+## Path A (Recommended): Terraform + AWS Bedrock
+
+This is the default for the lab: one `terraform apply` provisions the AWS resources and boots the containers.
+
+### Prereqs (your laptop)
+
+- AWS credentials configured (AWS CLI / SSO / assumed role)
+- Terraform installed
+- Bedrock enabled in your AWS region and **model access granted**
+
+### Deploy
+
+From repo root:
+
+```bash
+cd infra/terraform
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+terraform apply
+```
+
+### Get URLs + keys (for Swagger)
+
+```bash
+cd infra/terraform
+terraform output -raw swagger_url
+terraform output -raw api_base_url
+terraform output -raw api_key
+terraform output -raw admin_api_key
+```
+
+### Smoke test (run on the EC2 instance)
+
+SSH in, then:
+
+```bash
+cd /opt/<project_name>/repo
+export API_KEY=$(grep '^API_KEY=' .env | cut -d'=' -f2)
+chmod +x test_api.sh
+./test_api.sh
+```
+
+---
+
+## Path B (Optional): Manual Docker on EC2
+
+Use this if you want students to practice Docker setup steps, or if Terraform isn’t available.
+
+### 1) SSH to the instance
 
 ```bash
 ssh -i your-key.pem ec2-user@YOUR_EC2_IP
 ```
 
----
-
-## Step 2: Install Docker
+### 2) Install Docker (Amazon Linux 2023)
 
 ```bash
-# Update system
-sudo yum update -y
-
-# Install Docker
-sudo yum install -y docker
-sudo systemctl start docker
-sudo systemctl enable docker
+sudo dnf update -y
+sudo dnf install -y docker
+sudo systemctl enable --now docker
 sudo usermod -aG docker ec2-user
-
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Verify
 docker --version
-docker-compose --version
 ```
 
-**Note:** Log out and back in for group changes to take effect.
+Log out/in so group changes take effect.
 
----
-
-## Step 3: Upload Project Files
-
-**Option A - Using SCP (from your local machine):**
-
-```bash
-scp -r mem0_deployment_lab ec2-user@YOUR_EC2_IP:~
-```
-
-**Option B - Using Git:**
+### 3) Get the repo and create `.env`
 
 ```bash
 git clone YOUR_REPO_URL mem0_deployment_lab
 cd mem0_deployment_lab
-```
-
----
-
-## Step 4: Configure Environment
-
-```bash
-cd ~/mem0_deployment_lab
-
-# Create .env file from template
 cp .env.template .env
-
-# Generate API key
-openssl rand -hex 32
-
-# Edit .env file
+openssl rand -hex 32   # generate API_KEY
 nano .env
 ```
 
-**Required values:**
+Default lab config (AWS Bedrock):
 
-- `OPENAI_API_KEY` - Your OpenAI API key
-- `API_KEY` - Output from `openssl rand -hex 32`
+- `LLM_PROVIDER=aws_bedrock`
+- `EMBEDDER_PROVIDER=aws_bedrock`
+- `AWS_REGION=...`
+- `EMBEDDER_MODEL=amazon.titan-embed-text-v1`
+- `LLM_MODEL=...`
 
-### Optional Track (AWS-only): Bedrock Titan embeddings (and Bedrock LLM)
-If you want to **avoid OpenAI entirely**, set these in `.env`:
-
-- **Providers**
-  - `LLM_PROVIDER=aws_bedrock`
-  - `EMBEDDER_PROVIDER=aws_bedrock`
-- **Region**
-  - `AWS_REGION=us-east-1` (or your Bedrock-enabled region)
-- **Models**
-  - `EMBEDDER_MODEL=amazon.titan-embed-text-v1`
-  - `LLM_MODEL=anthropic.claude-3-5-sonnet-20240620-v1:0` (or another Bedrock model you have access to)
-- **Credentials**
-  - **Preferred on EC2**: attach an **IAM role** with Bedrock permissions (no keys in `.env`)
-  - Or set `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` (and optional `AWS_SESSION_TOKEN`)
-
-If you use this AWS-only track, you **do not need** `OPENAI_API_KEY`.
-
----
-
-## Step 5: Build Docker Image
+### 4) Build + run
 
 ```bash
-cd ~/mem0_deployment_lab
 sudo docker build -t mem0_api:latest -f deployment/Dockerfile .
-```
-
-**Expected:** Build completes successfully
-
----
-
-## Step 6: Create Docker Network
-
-```bash
 sudo docker network create mem0_network
-```
 
----
-
-## Step 7: Start Services
-
-### Start Qdrant (Vector Database)
-
-```bash
 sudo docker run -d \
   --name mem0_qdrant \
   --network mem0_network \
   -p 6333:6333 \
-  -p 6334:6334 \
   -v qdrant_data:/qdrant/storage \
-  -e QDRANT__SERVICE__GRPC_PORT=6334 \
   --restart unless-stopped \
   qdrant/qdrant:latest
-```
 
-### Start Mem0 API
-
-```bash
-cd ~/mem0_deployment_lab
 sudo docker run -d \
   --name mem0_api \
   --network mem0_network \
@@ -142,208 +116,27 @@ sudo docker run -d \
   mem0_api:latest
 ```
 
----
-
-## Step 8: Verify Deployment
-
-### Check Containers
-
-```bash
-sudo docker ps
-```
-
-**Expected:** See `mem0_api` and `mem0_qdrant` running
-
-### Check Logs
-
-```bash
-sudo docker logs mem0_api
-```
-
-**Expected:** See "Uvicorn running on http://0.0.0.0:8000"
-
-### Test Health Endpoint
+### 5) Verify + test
 
 ```bash
 curl http://localhost:8000/health
-```
-
-**Expected:**
-
-```json
-{
-  "status": "healthy",
-  "components": {
-    "api": "operational",
-    "memory": "operational",
-    "vector_store": "operational"
-  }
-}
-```
-
----
-
-## Step 9: Get Public IP
-
-```bash
-TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4
-```
-
-Save this IP address!
-
----
-
-## Step 10: Test API
-
-### Run Test Script
-
-```bash
-cd ~/mem0_deployment_lab
-
-# Set API key from .env file
 export API_KEY=$(grep '^API_KEY=' .env | cut -d'=' -f2)
-
-# Make script executable
 chmod +x test_api.sh
-
-# Run the test
 ./test_api.sh
 ```
 
-### Or Test Manually
+Open Swagger:
 
-```bash
-# Add memory
-curl -X POST http://YOUR_EC2_IP:8000/v1/memories/add \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -d '{
-    "messages": [
-      {"role": "user", "content": "My name is Alice"}
-    ],
-    "user_id": "alice_123"
-  }'
-
-# Search memory
-curl -X POST http://YOUR_EC2_IP:8000/v1/memories/search \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -d '{
-    "query": "What is the user'\''s name?",
-    "user_id": "alice_123"
-  }'
-```
+- `http://YOUR_EC2_IP:8000/docs`
 
 ---
 
-## Step 11: Access Swagger UI
+## Optional Provider Track: OpenAI
 
-Open in browser: `http://YOUR_EC2_IP:8000/docs`
+If you want to use OpenAI instead of Bedrock, set in `.env`:
 
-1. Click "Authorize"
-2. Enter your **API key** in **X-API-Key**
-3. (Optional) Enter your **admin key** in **X-Admin-Key** for `/admin/*` endpoints
-   - If you didn’t set a separate admin key, you can use the same value as `API_KEY`
-3. Click "Authorize" → "Close"
-4. Try endpoints!
+- `LLM_PROVIDER=openai`
+- `EMBEDDER_PROVIDER=openai`
+- `OPENAI_API_KEY=...`
 
-### Where do I find the API key?
-
-- If you created `.env` manually:
-
-```bash
-grep '^API_KEY=' .env
-```
-
-- If you deployed with Terraform (`infra/terraform`):
-  - On the EC2 instance: `/opt/<project_name>/repo/.env`
-  - Or via SSM Parameter Store:
-
-```bash
-aws ssm get-parameter --with-decryption \
-  --name "/<project_name>/API_KEY" \
-  --region <aws_region> \
-  --query Parameter.Value --output text
-```
-
----
-
-## Common Commands
-
-### View Logs
-
-```bash
-sudo docker logs mem0_api -f
-sudo docker logs mem0_qdrant -f
-```
-
-### Restart Services
-
-```bash
-sudo docker restart mem0_api
-sudo docker restart mem0_qdrant
-```
-
-### Stop Services
-
-```bash
-sudo docker stop mem0_api mem0_qdrant
-```
-
-### Update Code
-
-```bash
-cd ~/mem0_deployment_lab
-# Make changes to src/
-sudo docker build -t mem0_api:latest -f deployment/Dockerfile .
-sudo docker stop mem0_api && sudo docker rm mem0_api
-# Run the docker run command from Step 7
-```
-
----
-
-## Security Group Configuration
-
-Make sure your EC2 security group allows:
-
-- **Port 22** - SSH access
-- **Port 8000** - API access
-
----
-
-## Troubleshooting
-
-### Container Won't Start
-
-```bash
-sudo docker logs mem0_api
-# Check for OpenAI API key issues or Qdrant connection errors
-```
-
-### Can't Connect from Browser
-
-- Check security group (port 8000 open)
-- Verify API is running: `curl http://localhost:8000/health`
-
-### Memory Not Persisting
-
-```bash
-# Check Qdrant volume exists
-sudo docker volume ls | grep qdrant
-```
-
----
-
-## What's Next?
-
-- Integrate with your application
-- Review API.md for endpoint details
-- Check Swagger UI for interactive docs
-- Monitor with `/metrics` endpoint
-
----
-
-**Deployment Complete!** 🎉
-
-Your self-hosted Mem0 API is running at: `http://YOUR_EC2_IP:8000`
+Everything else stays the same.

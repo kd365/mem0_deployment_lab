@@ -81,7 +81,7 @@ app.openapi = custom_openapi
 # Add observability middleware (FIRST, before CORS)
 if OBSERVABILITY_ENABLED:
     app.add_middleware(ObservabilityMiddleware)
-    logger.info("✓ Observability middleware enabled")
+    logger.info("Observability middleware enabled")
 
 # CORS configuration
 app.add_middleware(
@@ -97,7 +97,7 @@ app.include_router(health_router)        # Health checks, metrics, alerts
 app.include_router(memory_router)        # Memory CRUD operations
 app.include_router(admin_router)         # Business intelligence, admin ops
 
-logger.info("✓ All route modules registered")
+logger.info("All route modules registered")
 
 
 if __name__ == "__main__":

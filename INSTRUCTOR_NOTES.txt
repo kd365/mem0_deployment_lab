@@ -4,7 +4,7 @@
 1. Provision EC2 instances (one per student)
 2. Distribute SSH keys
 3. Test one deployment yourself
-4. Have OpenAI keys ready
+4. Ensure AWS Bedrock is enabled in your region and model access is granted
 
 ## Class Flow (90 min)
 
@@ -34,17 +34,16 @@ Q: "Can I use this in production?"
 A: Yes, but add: SSL, rate limiting, monitoring, backups
 
 Q: "How much will this cost?"
-A: ~$35/month for EC2 + OpenAI usage (~$0.01-0.05 per conversation)
+A: Mostly EC2 cost (~$30/month for a single always-on instance). Bedrock usage varies by model/traffic and is typically pennies for lab testing.
 
 Q: "Can I modify the code?"
 A: Absolutely! It's yours. Check src/ directory.
 
 Q: "What if OpenAI is down?"
-A: API will still run, but embeddings/search won't work
+A: If using the OpenAI provider track, the API will run but embedding/LLM features won’t work. In the default AWS track, this is not relevant.
 
 Q: "Can we stay fully inside AWS (no OpenAI)?"
-A: Yes. Use the optional AWS-only track (Bedrock) in `SETUP.md` and `ARCHITECTURE.md`:
-   set `LLM_PROVIDER=aws_bedrock` and `EMBEDDER_PROVIDER=aws_bedrock`, plus `AWS_REGION` and models.
+A: Yes. This is the default track for this lab. See `SETUP.md` (Terraform recommended).
 
 ## Success Metrics
 - All students deploy successfully
@@ -72,5 +71,5 @@ Class of 30: ~$3.00 total
 - LAB_GUIDE.md (teaching guide)
 - INSTRUCTOR_NOTES.txt (this file)
 
-Good luck! 🚀
+Good luck!
 

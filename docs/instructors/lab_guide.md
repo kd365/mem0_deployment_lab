@@ -1,5 +1,7 @@
 # Mem0 Deployment Lab - Instructor Guide
 
+Start: [`README.md`](README.md) • Student guide: [`../students/README.md`](../students/README.md)
+
 ## Lab Overview
 
 **Duration:** 60-90 minutes  
@@ -97,7 +99,7 @@ docker-compose --version
 ### Checkpoint 2: Files Uploaded
 ```bash
 ls ~/mem0_deployment_lab
-# Should see: src/, deployment/, SETUP.md, etc.
+# Should see: src/, deployment/, docs/, scripts/, etc.
 ```
 
 ### Checkpoint 3: Environment Configured
@@ -138,7 +140,7 @@ For students who finish early:
 1. Modify the FastAPI code to add a custom endpoint
 2. Set up nginx reverse proxy with SSL
 3. Implement rate limiting
-4. Optional provider swap: switch to OpenAI by editing `.env` (see `SETUP.md`)
+4. Optional provider swap: switch to OpenAI by editing `.env` (see [`../students/setup.md`](../students/setup.md))
 
 ---
 

@@ -1,6 +1,6 @@
 # Mem0 Deployment Lab
 
-**Self-hosted memory layer with FastAPI + Qdrant vector database**
+Self-hosted memory layer with FastAPI + Qdrant vector database
 
 > **Lab Objective:** Deploy a production-ready AI memory API on AWS (Bedrock + Titan + Qdrant) in ~30 minutes
 
@@ -8,7 +8,7 @@
 
 ## What You'll Build
 
-```
+```text
 Your App → FastAPI (Port 8000) → Mem0 SDK → Qdrant (Vector DB)
 ```
 
@@ -36,16 +36,11 @@ Your App → FastAPI (Port 8000) → Mem0 SDK → Qdrant (Vector DB)
 
 ### 1. Start Here (Students)
 
-```bash
-# Follow the step-by-step deploy + test guide
-cat SETUP.md
-```
+- Student guide: [`docs/students/README.md`](docs/students/README.md)
 
 ### 2. Test Your API (Students)
 
-```bash
-./test_api.sh
-```
+- Smoke test script: [`scripts/test_api.sh`](scripts/test_api.sh)
 
 ### 3. Use Swagger UI (Students)
 
@@ -55,18 +50,15 @@ Visit: `http://YOUR_EC2_IP:8000/docs`
 
 ## What's Included
 
-```
+```text
 mem0_deployment_lab/
-├── SETUP.md              # Students: deploy (Terraform recommended) + test
-├── API.md                # Students: Swagger + endpoint examples
-├── ARCHITECTURE.md       # Optional reading: how the stack works
-├── LAB_GUIDE.md          # Instructors: lesson plan + timing + checkpoints
-├── INSTRUCTOR_NOTES.txt  # Instructors: quick run-of-show + reminders
+├── docs/                 # All guides (students + instructors)
+├── scripts/              # Helper scripts (smoke tests, etc.)
 ├── src/                  # FastAPI application
 ├── deployment/           # Docker configuration
 ├── requirements.txt      # Python dependencies
 ├── .env.template         # Environment variables template
-└── test_api.sh           # API test script
+└── infra/                # Terraform + infra docs
 ```
 
 ---
@@ -93,15 +85,15 @@ mem0_deployment_lab/
 ## Documentation
 
 - **Students (do in order)**
-  - `SETUP.md`: deploy + verify (Terraform recommended)
-  - `API.md`: Swagger + copy/paste examples for each endpoint
-  - `test_api.sh`: smoke tests against the API
-  - `ARCHITECTURE.md` (optional): understand embeddings, vector DBs, and Mem0’s infer pipeline
+  - [`docs/students/setup.md`](docs/students/setup.md): deploy + verify (Terraform recommended)
+  - [`docs/students/api.md`](docs/students/api.md): Swagger + copy/paste examples for each endpoint
+  - [`scripts/test_api.sh`](scripts/test_api.sh): smoke tests against the API
+  - [`docs/students/architecture.md`](docs/students/architecture.md) (optional): understand embeddings, vector DBs, and Mem0’s infer pipeline
 - **Instructors**
-  - `LAB_GUIDE.md`: structure, timing, checkpoints, extensions
-  - `INSTRUCTOR_NOTES.txt`: quick reminders and common student pitfalls
+  - [`docs/instructors/lab_guide.md`](docs/instructors/lab_guide.md): structure, timing, checkpoints, extensions
+  - [`docs/instructors/instructor_notes.md`](docs/instructors/instructor_notes.md): quick reminders and common student pitfalls
 - **Infrastructure**
-  - `infra/terraform/README.md`: Terraform details (inputs/outputs, what gets created)
+  - [`infra/terraform/README.md`](infra/terraform/README.md): Terraform details (inputs/outputs, what gets created)
 - **Interactive docs**
   - Swagger UI: `http://your-server:8000/docs`
 
@@ -109,9 +101,9 @@ mem0_deployment_lab/
 
 ## Support
 
-- Mem0 Docs: https://docs.mem0.ai
-- Qdrant Docs: https://qdrant.tech/documentation/
+- Mem0 Docs: `https://docs.mem0.ai`
+- Qdrant Docs: `https://qdrant.tech/documentation/`
 
 ---
 
-**Ready to deploy?** Open `SETUP.md`
+**Ready to deploy?** Start at [`docs/students/setup.md`](docs/students/setup.md)

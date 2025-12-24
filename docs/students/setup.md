@@ -1,5 +1,7 @@
 # Mem0 Stack Setup Guide (AWS-first)
 
+Start here: [`README.md`](README.md) • Next: [`api.md`](api.md)
+
 Deploy a self-hosted AI memory API on AWS using:
 
 - FastAPI + Mem0
@@ -46,8 +48,8 @@ SSH in, then:
 ```bash
 cd /opt/<project_name>/repo
 export API_KEY=$(grep '^API_KEY=' .env | cut -d'=' -f2)
-chmod +x test_api.sh
-./test_api.sh
+chmod +x scripts/test_api.sh
+./scripts/test_api.sh
 ```
 
 ---
@@ -121,8 +123,8 @@ sudo docker run -d \
 ```bash
 curl http://localhost:8000/health
 export API_KEY=$(grep '^API_KEY=' .env | cut -d'=' -f2)
-chmod +x test_api.sh
-./test_api.sh
+chmod +x scripts/test_api.sh
+./scripts/test_api.sh
 ```
 
 Open Swagger:
@@ -140,3 +142,7 @@ If you want to use OpenAI instead of Bedrock, set in `.env`:
 - `OPENAI_API_KEY=...`
 
 Everything else stays the same.
+
+---
+
+Next: [`api.md`](api.md)

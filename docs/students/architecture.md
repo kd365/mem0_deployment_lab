@@ -1,5 +1,7 @@
 # How the Mem0 Stack Works
 
+Prev: [`api.md`](api.md) • Start: [`README.md`](README.md)
+
 ## What is Mem0?
 
 Mem0 is an **intelligent memory layer** for AI applications. It remembers user conversations and context across sessions, making AI assistants smarter over time.
@@ -147,7 +149,7 @@ A: SQL finds exact matches. Vectors find similar meaning. "car accident" and "ve
 A: Your API can still run, but `add`/`search` may fail because embeddings/LLM calls can’t complete. For labs, the most common issue is missing Bedrock model access.
 
 **Q: Can I use OpenAI instead?**  
-A: Yes, OpenAI is an optional provider track (see `SETUP.md`).
+A: Yes, OpenAI is an optional provider track (see [`setup.md`](setup.md)).
 
 **Q: Is Qdrant the only vector DB?**  
 A: No. Mem0 also supports Pinecone, Weaviate, Milvus, Chroma. Qdrant is easiest to self-host.

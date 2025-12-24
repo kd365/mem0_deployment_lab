@@ -1,5 +1,7 @@
 # API Quick Reference
 
+Prev: [`setup.md`](setup.md) • Optional reading: [`architecture.md`](architecture.md)
+
 ## Authentication
 
 All endpoints (except `/health`) require `X-API-Key` header:

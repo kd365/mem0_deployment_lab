@@ -93,7 +93,6 @@ By the end of this lab, students will be able to:
 ### Checkpoint 1: Docker Installed
 ```bash
 docker --version
-docker-compose --version
 ```
 
 ### Checkpoint 2: Files Uploaded
@@ -105,7 +104,7 @@ ls ~/mem0_deployment_lab
 ### Checkpoint 3: Environment Configured
 ```bash
 cat ~/mem0_deployment_lab/.env | grep -v "^#"
-# Should see OPENAI_API_KEY and API_KEY filled in
+# Should see provider + models + API_KEY filled in (AWS Bedrock by default)
 ```
 
 ### Checkpoint 4: Containers Running

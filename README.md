@@ -65,12 +65,12 @@ mem0_deployment_lab/
 
 ## Stack Components
 
-| Component  | Technology                      | Port |
-| ---------- | ------------------------------- | ---- |
-| API Server | FastAPI + Mem0 SDK              | 8000 |
-| Vector DB  | Qdrant                          | 6333 |
-| Embeddings | AWS Bedrock (Titan)             | -    |
-| LLM        | AWS Bedrock (e.g., Claude)      | -    |
+| Component  | Technology                 | Port |
+| ---------- | -------------------------- | ---- |
+| API Server | FastAPI + Mem0 SDK         | 8000 |
+| Vector DB  | Qdrant                     | 6333 |
+| Embeddings | AWS Bedrock (Titan)        | -    |
+| LLM        | AWS Bedrock (e.g., Claude) | -    |
 
 ---
 

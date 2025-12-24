@@ -81,7 +81,7 @@ docker run -d \
   --restart unless-stopped \
   qdrant/qdrant:latest
 
-# Build API image (uses classic docker build; avoids buildx requirement from docker compose)
+# Build API image (uses classic docker build; avoids buildx requirements)
 echo "=== Building mem0_api image ==="
 docker build -t mem0_api:latest -f deployment/Dockerfile .
 docker images | head -n 20

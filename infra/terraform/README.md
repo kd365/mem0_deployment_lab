@@ -52,16 +52,9 @@ terraform output -raw admin_api_key
   - writes `.env`
   - starts Qdrant + API containers (no Docker Compose required)
 
-## Provider Modes (OpenAI vs AWS-only)
+## Provider Modes (AWS-first vs OpenAI optional)
 
-### Mode A (Default): OpenAI for embeddings + LLM
-
-In `terraform.tfvars`:
-
-- `ai_mode = "openai"`
-- `openai_api_key = "..."` (required)
-
-### Mode B (Optional AWS-only): Bedrock (Titan embeddings + Bedrock LLM)
+### Mode A (Default): AWS Bedrock (Titan embeddings + Bedrock LLM)
 
 In `terraform.tfvars`:
 
@@ -69,6 +62,13 @@ In `terraform.tfvars`:
 - `aws_region = "us-east-1"` (or a Bedrock-enabled region)
 - `embedder_model = "amazon.titan-embed-text-v1"`
 - `llm_model = "anthropic.claude-3-5-sonnet-20240620-v1:0"` (or any Bedrock model you have access to)
+
+### Mode B (Optional): OpenAI for embeddings + LLM
+
+In `terraform.tfvars`:
+
+- `ai_mode = "openai"`
+- `openai_api_key = "..."` (required)
 
 Credentials:
 

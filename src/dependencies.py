@@ -9,6 +9,7 @@ from mem0 import Memory
 from fastapi import HTTPException, Security
 from fastapi.security import APIKeyHeader
 from dotenv import load_dotenv
+from mem0_debug import DebugLlmProxy
 
 # Load environment variables
 load_dotenv()
@@ -130,6 +131,30 @@ def get_mem0_config():
 
 # Initialize Memory instance (singleton)
 memory = Memory.from_config(get_mem0_config())
+
+# Optional: wrap LLM to debug raw Bedrock responses during infer=true
+try:
+    llm_provider = os.getenv("LLM_PROVIDER", "openai").strip()
+    if os.getenv("MEM0_DEBUG_LLM", "").strip().lower() in {"1", "true", "yes"} and llm_provider == "aws_bedrock":
+        # The Bedrock LLM wrapper stores model in config; fall back gracefully.
+        model = getattr(getattr(memory, "config", None), "llm", None)
+        model_name = ""
+        try:
+            model_name = (model.config.model if model and getattr(model, "config", None) else "")  # type: ignore[attr-defined]
+        except Exception:
+            model_name = ""
+
+        # Most mem0 LLM objects have .config.model; if not, it's fine.
+        if not model_name:
+            model_name = getattr(getattr(memory, "llm", None), "config", None) and getattr(memory.llm.config, "model", "")  # type: ignore[attr-defined]
+        if not model_name:
+            model_name = os.getenv("LLM_MODEL", "")
+
+        memory.llm = DebugLlmProxy(inner=memory.llm, provider=llm_provider, model=model_name)  # type: ignore[assignment]
+        logger.warning("MEM0_DEBUG_LLM enabled: wrapping Bedrock LLM for raw-response logging")
+except Exception as e:
+    logger.warning(f"Failed to enable MEM0_DEBUG_LLM wrapper: {e}")
+
 logger.info("Mem0 initialized successfully")
 
 # Observability imports

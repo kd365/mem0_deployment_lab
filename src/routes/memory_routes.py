@@ -13,6 +13,7 @@ from models import (
     DeleteMemoryRequest,
     GetMemoryHistoryRequest
 )
+from mem0_debug import set_mem0_request_context, reset_mem0_request_context
 from dependencies import (
     memory,
     verify_api_key,
@@ -36,6 +37,16 @@ async def add_memory(
     """
     start_time = time.time()
     
+    ctx_token = set_mem0_request_context(
+        {
+            "endpoint": "/v1/memories/add",
+            "user_id": request.user_id,
+            "agent_id": request.agent_id,
+            "run_id": request.run_id or request.session_id,
+            "infer": request.infer,
+        }
+    )
+
     try:
         # Convert Pydantic models to dicts
         messages = [msg.model_dump() for msg in request.messages]
@@ -101,6 +112,8 @@ async def add_memory(
             )
         logger.error(f"Error adding memory: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        reset_mem0_request_context(ctx_token)
 
 
 @router.post("/search")

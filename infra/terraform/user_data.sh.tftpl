@@ -10,6 +10,10 @@ echo "=== Mem0 Deployment Lab bootstrap starting ==="
 dnf update -y
 dnf install -y git jq awscli
 
+# Ensure AWS CLI has a region (otherwise `aws ssm ...` fails with "You must specify a region")
+export AWS_REGION="${aws_region_runtime}"
+export AWS_DEFAULT_REGION="${aws_region_runtime}"
+
 # Docker
 dnf install -y docker
 systemctl enable docker
@@ -39,9 +43,9 @@ git fetch --all
 git checkout "${repo_ref}"
 
 # Pull secrets from SSM
-API_KEY="$(aws ssm get-parameter --with-decryption --name "${ssm_prefix}/API_KEY" --query Parameter.Value --output text)"
-ADMIN_API_KEY="$(aws ssm get-parameter --with-decryption --name "${ssm_prefix}/ADMIN_API_KEY" --query Parameter.Value --output text)"
-OPENAI_API_KEY="$(aws ssm get-parameter --with-decryption --name "${ssm_prefix}/OPENAI_API_KEY" --query Parameter.Value --output text || echo '')"
+API_KEY="$(aws ssm get-parameter --region "${aws_region_runtime}" --with-decryption --name "${ssm_prefix}/API_KEY" --query Parameter.Value --output text)"
+ADMIN_API_KEY="$(aws ssm get-parameter --region "${aws_region_runtime}" --with-decryption --name "${ssm_prefix}/ADMIN_API_KEY" --query Parameter.Value --output text)"
+OPENAI_API_KEY="$(aws ssm get-parameter --region "${aws_region_runtime}" --with-decryption --name "${ssm_prefix}/OPENAI_API_KEY" --query Parameter.Value --output text || echo '')"
 
 # Write .env for the app
 cat > .env <<EOF

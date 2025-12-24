@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Log everything user-data does (so failures are obvious)
+exec > >(tee -a /var/log/mem0-bootstrap.log) 2>&1
+
 APP_DIR="/opt/${project_name}"
 REPO_DIR="$${APP_DIR}/repo"
 
@@ -30,6 +33,7 @@ fi
 cd "$${REPO_DIR}"
 git fetch --all
 git checkout "${repo_ref}"
+echo "Deployed git ref: $(git rev-parse --short HEAD)"
 
 # Pull secrets from SSM
 API_KEY="$(aws ssm get-parameter --region "${aws_region_runtime}" --with-decryption --name "${ssm_prefix}/API_KEY" --query Parameter.Value --output text)"
@@ -78,9 +82,12 @@ docker run -d \
   qdrant/qdrant:latest
 
 # Build API image (uses classic docker build; avoids buildx requirement from docker compose)
+echo "=== Building mem0_api image ==="
 docker build -t mem0_api:latest -f deployment/Dockerfile .
+docker images | head -n 20
 
 # Start Mem0 API
+echo "=== Starting mem0_api container ==="
 docker rm -f mem0_api >/dev/null 2>&1 || true
 docker run -d \
   --name mem0_api \

@@ -8,7 +8,7 @@ echo "=== Mem0 Deployment Lab bootstrap starting ==="
 
 # Packages
 dnf update -y
-dnf install -y git jq awscli
+dnf install -y git jq awscli curl
 
 # Ensure AWS CLI has a region (otherwise `aws ssm ...` fails with "You must specify a region")
 export AWS_REGION="${aws_region_runtime}"

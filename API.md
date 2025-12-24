@@ -61,9 +61,12 @@ X-API-Key: YOUR_KEY
     {"role": "user", "content": "My name is John"},
     {"role": "assistant", "content": "Hi John!"}
   ],
-  "user_id": "john_123"
+  "user_id": "john_123",
+  "infer": false
 }
 ```
+
+**Tip (Labs):** set `"infer": false` to **force storing** the message as a memory so `get-all`/`search` are deterministic.
 
 ---
 

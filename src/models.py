@@ -32,6 +32,15 @@ class AddMemoryRequest(BaseModel):
     run_id: Optional[str] = Field(None, description="Run identifier (replaces session_id in v1.0.0)")
     session_id: Optional[str] = Field(None, description="Legacy session identifier (mapped to run_id)")
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata (optional)")
+    infer: bool = Field(
+        True,
+        description="If true (default), Mem0 uses an LLM to decide what to store. If false, stores messages as raw memories (useful for deterministic labs).",
+    )
+    memory_type: Optional[str] = Field(
+        None,
+        description='Optional memory type (advanced). For procedural memory, use "procedural_memory" with agent_id.',
+    )
+    prompt: Optional[str] = Field(None, description="Optional custom prompt for memory extraction (advanced).")
     version: Optional[str] = Field("v2", description="API version (v2 recommended)")
     output_format: Optional[str] = Field("v1.1", description="Output format version")
     

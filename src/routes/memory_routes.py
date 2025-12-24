@@ -53,6 +53,12 @@ async def add_memory(
             kwargs["run_id"] = run_id
         if request.metadata:
             kwargs["metadata"] = request.metadata
+        # Deterministic lab option: infer=False stores raw messages
+        kwargs["infer"] = request.infer
+        if request.memory_type:
+            kwargs["memory_type"] = request.memory_type
+        if request.prompt:
+            kwargs["prompt"] = request.prompt
         
         # Track OpenAI calls
         if OBSERVABILITY_ENABLED:

@@ -34,6 +34,7 @@ curl -s -X POST "${API_URL}/v1/memories/add" \
       {"role": "assistant", "content": "Nice to meet you Alice!"}
     ],
     "user_id": "alice_123"
+    ,"infer": false
   }' | python3 -m json.tool
 echo ""
 echo ""

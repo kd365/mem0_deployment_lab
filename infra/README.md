@@ -34,5 +34,3 @@ Terraform supports two modes:
 - Your **terraform state may include secrets** if you put them in tfvars.
   - For labs: keep `terraform.tfstate` local and never commit it.
   - For production: use a remote backend (S3 + DynamoDB) with encryption.
-
-

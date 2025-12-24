@@ -49,6 +49,21 @@ def get_mem0_config():
 
     openai_api_key = os.getenv("OPENAI_API_KEY")
 
+    # Optional: override Mem0 prompts (useful when certain LLMs refuse or don't follow the default prompt well)
+    custom_fact_extraction_prompt = os.getenv("MEM0_CUSTOM_FACT_EXTRACTION_PROMPT")
+    custom_update_memory_prompt = os.getenv("MEM0_CUSTOM_UPDATE_MEMORY_PROMPT")
+
+    # For AWS Bedrock, some models can be overly conservative with Mem0's default "personal info organizer" prompt.
+    # This "lab-safe" prompt tends to be more reliable and still returns the required JSON shape: {"facts": [...]}
+    if llm_provider == "aws_bedrock" and not custom_fact_extraction_prompt:
+        custom_fact_extraction_prompt = (
+            "You extract short, atomic facts from a conversation for an AI assistant to remember.\n"
+            "Only use information explicitly stated by the user.\n"
+            "Return ONLY valid JSON with exactly this shape:\n"
+            '{\"facts\": [\"...\"]}\n'
+            "If there are no durable facts/preferences worth remembering, return {\"facts\": []}.\n"
+        )
+
     # Fail fast only when OpenAI is actually required
     if (llm_provider == "openai" or embedder_provider == "openai") and not openai_api_key:
         raise RuntimeError(
@@ -57,6 +72,9 @@ def get_mem0_config():
         )
 
     return {
+        # Mem0 prompt overrides (optional)
+        "custom_fact_extraction_prompt": custom_fact_extraction_prompt,
+        "custom_update_memory_prompt": custom_update_memory_prompt,
         "llm": {
             "provider": llm_provider,
             "config": (

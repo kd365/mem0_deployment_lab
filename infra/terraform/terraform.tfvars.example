@@ -30,7 +30,8 @@ api_port = 8000
 ai_mode = "openai"
 
 # OpenAI (required if ai_mode = "openai")
-openai_api_key = "REPLACE_ME"
+# Leave blank for ai_mode="aws"
+openai_api_key = ""
 openai_base_url = ""                    # optional
 
 # AWS Bedrock (used if ai_mode = "aws")

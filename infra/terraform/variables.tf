@@ -81,6 +81,10 @@ variable "openai_api_key" {
   description = "OpenAI API key (required when ai_mode=openai)."
   default     = ""
   sensitive   = true
+  validation {
+    condition     = var.ai_mode != "openai" || length(trimspace(var.openai_api_key)) > 0
+    error_message = "openai_api_key must be set when ai_mode = \"openai\"."
+  }
 }
 
 variable "openai_base_url" {

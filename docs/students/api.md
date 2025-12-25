@@ -329,6 +329,7 @@ Run these via `POST /v1/memories/search` with the matching `user_id`:
   - `What does Leia require before applying Terraform in prod?`
   - `Which SLO metrics does Leia watch?`
 - Cheeky:
+  - `How do I page Leia during an outage?` (should match “use the Force... then send one concise alert”)
   - `Does Leia like alert storms?` (should match “single channel / avoid alert fatigue”)
   - `What does Leia call incident updates?` (should match “mission briefings”)
   - `The graph looks like a moon. What does Leia assume?` (should match “scaling issue”)

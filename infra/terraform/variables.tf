@@ -32,10 +32,10 @@ variable "ssh_key_name" {
   type        = string
   description = "Existing EC2 Key Pair name for SSH access (required for this lab)."
   default     = ""
-  validation {
-    condition     = length(trimspace(var.ssh_key_name)) > 0
-    error_message = "ssh_key_name must be set (students should use an existing EC2 key pair)."
-  }
+  # validation {
+  #   condition     = length(trimspace(var.ssh_key_name)) > 0
+  #   error_message = "ssh_key_name must be set (students should use an existing EC2 key pair)."
+  # }
 }
 
 variable "allowed_ssh_cidr" {

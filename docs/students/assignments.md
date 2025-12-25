@@ -7,6 +7,7 @@ Students must complete the **Required** section (in order), then pick **any 2** 
 ## Required (do these in order)
 
 1. **Separate API key vs Admin key (Terraform)**
+
    - Update Terraform so it generates **two distinct keys by default**:
      - `api_key` (for `/v1/*`)
      - `admin_api_key` (for `/admin/*`)
@@ -70,5 +71,3 @@ How to improve it (design ideas):
 ### Bonus (does not count toward the “pick any 2”)
 
 - **SSM-first secrets**: move any secrets out of `terraform.tfvars` and into SSM created out-of-band, then modify Terraform to read them.
-
-

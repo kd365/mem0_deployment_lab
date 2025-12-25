@@ -6,5 +6,3 @@
 2. **Test / Swagger**: [`api.md`](api.md)
 3. **Optional reading**: [`architecture.md`](architecture.md)
 4. **Assignments**: [`assignments.md`](assignments.md)
-
-

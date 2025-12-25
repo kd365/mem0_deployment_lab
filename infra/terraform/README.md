@@ -39,6 +39,12 @@ terraform output -raw api_key
 terraform output -raw admin_api_key
 ```
 
+Tip: if you only need the admin key, you can run:
+
+```bash
+terraform output -raw admin_api_key
+```
+
 ## What Gets Provisioned
 
 - **Security Group**

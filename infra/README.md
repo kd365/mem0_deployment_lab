@@ -26,7 +26,7 @@ Terraform supports two modes:
   - `ai_mode = "aws"`
   - `embedder_model = "amazon.titan-embed-text-v1"`
 - **Optional track (OpenAI)**
-  - Uses `OPENAI_API_KEY`
+  - Uses OpenAI API key (configured in Terraform)
   - `ai_mode = "openai"`
 
 ## Important Notes (Teaching-friendly)

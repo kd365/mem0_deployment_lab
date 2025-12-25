@@ -74,14 +74,13 @@ Everything else stays the same.
 
 If you see `{"results":[]}` when calling `/v1/memories/add` with `infer=true`, enable Mem0's Bedrock LLM debug logging:
 
-- Set `MEM0_DEBUG_LLM=1` in the API container environment (Terraform writes `.env` on the instance)
-- Then check logs:
+- Check logs:
 
 ```bash
 sudo docker logs mem0_api --tail 200
 ```
 
-You should see `[MEM0_DEBUG_LLM]` lines showing the raw model response so you can confirm whether it returned valid JSON facts.
+If debug logging is enabled for the lab, you’ll see extra lines showing the raw model response so you can confirm whether it returned valid JSON facts.
 
 ---
 

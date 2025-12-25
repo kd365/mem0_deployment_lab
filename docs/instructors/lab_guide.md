@@ -31,13 +31,11 @@ By the end of this lab, students will be able to:
 
 ### Part 2: Configuration (10 min)
 
-- Understand `.env` settings (providers/models/region)
 - Understand API key auth and where keys are stored (Terraform outputs / SSM)
 
 ### Part 3: Docker Deployment (15 min)
 
-- Observe the running services (FastAPI + Qdrant)
-- Verify `/health` and containers/logs
+- Verify `/health` and if needed, troubleshoot with logs but will need to enable SSH in Terraform to do this.
 
 ### Part 4: Testing & Exploration (25 min)
 
@@ -81,56 +79,7 @@ By the end of this lab, students will be able to:
 
 ---
 
-## Common Student Issues
-
-### Issue 1: "Docker command not found"
-
-**Solution:** User needs to log out and back in after adding to docker group
-
-### Issue 2: "Can't connect to API from browser"
-
-**Solution:** Check EC2 security group - port 8000 must be open
-
-### Issue 3: "OpenAI API error"
-
-**Solution:** If using OpenAI track, verify OPENAI_API_KEY is set correctly. Otherwise (AWS track), verify Bedrock model access and IAM permissions.
-
-### Issue 4: "Container keeps restarting"
-
-**Solution:** Check logs with `sudo docker logs mem0_api`
-
----
-
-## Checkpoints
-
-### Checkpoint 1: Docker Installed
-
-```bash
-docker --version
-```
-
-### Checkpoint 2: Files Uploaded
-
-```bash
-ls ~/mem0_deployment_lab
-# Should see: src/, deployment/, docs/, infra/, etc.
-```
-
-### Checkpoint 3: Environment Configured
-
-```bash
-cat ~/mem0_deployment_lab/.env | grep -v "^#"
-# Should see provider + models + API_KEY filled in (AWS Bedrock by default)
-```
-
-### Checkpoint 4: Containers Running
-
-```bash
-sudo docker ps
-# Should see mem0_api and mem0_qdrant running
-```
-
-### Checkpoint 5: Health Check Pass
+### Checkpoint: Health Check Pass
 
 ```bash
 # Students should use Terraform output to open Swagger and verify /health there:
@@ -160,11 +109,9 @@ For students who finish early:
 1. Modify the FastAPI code to add a custom endpoint
 2. Set up nginx reverse proxy with SSL
 3. Implement rate limiting
-4. Optional provider swap: switch to OpenAI by editing `.env` (see [`../students/setup.md`](../students/setup.md))
+4. Optional provider swap: switch to OpenAI
 
 ---
-
-## Assessment Ideas
 
 ### Knowledge Check Questions
 
@@ -173,7 +120,7 @@ For students who finish early:
 3. What authentication method does this API use?
 4. How are embeddings generated in this system?
 
-### Practical Assessment
+### Practical Checkpoints
 
 1. Successfully deploy the stack to EC2
 2. Add and search memories via API
@@ -184,49 +131,25 @@ For students who finish early:
 
 ## Troubleshooting Tips
 
-### For Instructors
-
-**If containers won't start:**
-
-```bash
-# Check available memory
-free -h
-
-# Check disk space
-df -h
-
-# Remove old containers/images
-sudo docker system prune -a
-```
-
-**If OpenAI is slow:**
-
-- Could be rate limiting
-- Check OpenAI dashboard for quota
-- Consider using smaller model for demo
-
 **If Qdrant connection fails:**
 
 - Ensure Qdrant container started first
 - Check Docker network: `sudo docker network inspect mem0_network`
-- Verify QDRANT_HOST env var is set to "mem0_qdrant"
+- Verify the Qdrant host value is set correctly (the Terraform bootstrap runs Qdrant as `mem0_qdrant`)
 
 ---
 
 ## Time Management
 
-| Activity            | Estimated Time | Critical? |
-| ------------------- | -------------- | --------- |
-| Terraform apply     | 10-15 min      | Yes       |
-| Wait for bootstrap  | 3-8 min        | Yes       |
-| Swagger auth        | 3 min          | Yes       |
-| Seed + search demo  | 15 min         | Yes       |
-| Testing             | 10 min         | Yes       |
-| Swagger exploration | 10 min         | No        |
-| Discussion          | 10 min         | No        |
-
-**Critical path:** ~35-45 minutes  
-**Full lab:** 60-90 minutes
+| Activity            | Estimated Time |
+| ------------------- | -------------- |
+| Terraform apply     | 5 min          |
+| Wait for bootstrap  | 5 min          |
+| Swagger auth        | 3 min          |
+| Seed + search demo  | 10-15 min      |
+| Testing             | 10-15 min      |
+| Swagger exploration | 10-30 min      |
+| Discussion          | 10 min         |
 
 ---
 
@@ -234,16 +157,12 @@ sudo docker system prune -a
 
 ### Before Class
 
-1. Provision EC2 instances for students
-2. Ensure security groups have ports 22, 8000 open
-3. Test deployment on one instance
-4. Ensure Bedrock model access is enabled in your AWS account/region
+Discover with Bedrock model access is enabled in what AWS account/region
 
 ### Materials Needed
 
-- This repository URL or zip file
+- This repository URL
 - AWS account access with Bedrock enabled (and model access granted)
-- Projected screen for demos
 
 ---
 
@@ -252,7 +171,7 @@ sudo docker system prune -a
 ### Discussion Questions
 
 1. What challenges did you face during deployment?
-2. How would you modify this for production use?
+2. How to make this more engaging for the students?
 3. What other use cases could benefit from vector databases?
 4. What security improvements would you add?
 
@@ -292,7 +211,6 @@ Students should be able to:
 
 ## Additional Notes
 
-- Have a backup demo instance ready
 - Screenshot key steps for presentation
 - Encourage students to experiment after deployment
 - This can be extended to a multi-day project

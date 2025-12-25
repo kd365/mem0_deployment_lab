@@ -79,7 +79,7 @@ For production app with 1000 users:
 
 ## Optional Provider: OpenAI
 
-This repo supports OpenAI as an optional provider track (controlled by Terraform `ai_mode`; the EC2 instance `.env` is generated at boot from SSM):
+This repo supports OpenAI as an optional provider track (controlled by Terraform `ai_mode`; Terraform writes runtime values into SSM and the instance bootstraps from there):
 
 ```bash
 # Use OpenAI instead of Bedrock (Terraform)

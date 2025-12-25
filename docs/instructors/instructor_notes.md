@@ -25,7 +25,7 @@ Students need permission to run the Terraform in `infra/terraform/`. At a minimu
   - `iam:AttachRolePolicy`, `iam:DetachRolePolicy`
   - `iam:CreateInstanceProfile`, `iam:DeleteInstanceProfile`, `iam:AddRoleToInstanceProfile`, `iam:RemoveRoleFromInstanceProfile`
   - `iam:GetRole`, `iam:GetPolicy`, `iam:List*`
-- **SSM Parameter Store**: create/read SecureString parameters for `.env`
+- **SSM Parameter Store**: create/read SecureString parameters used by the EC2 bootstrap
   - `ssm:PutParameter`, `ssm:DeleteParameter`, `ssm:GetParameter`, `ssm:GetParameters`
 - **KMS decrypt** (for SecureString reads)
   - `kms:Decrypt` (Terraform’s policy uses `*` for labs; production should be tighter)
@@ -163,7 +163,7 @@ From the AWS Console:
 - Use Swagger:
   - Seed demo data for 3 users (`/v1/demo/seed/*`)
   - Run `search` queries and explain semantic search vs keyword search
-- Show where config lives (`.env` on instance, SSM parameters, Terraform outputs)
+- Show where config lives (Terraform outputs, SSM parameters)
 - Discuss IAM role vs long-lived keys for Bedrock
 
 ### Assignments
@@ -173,7 +173,7 @@ From the AWS Console:
 1. **Separate API key vs Admin key**
 
    - Change Terraform to generate **two distinct keys by default** and update outputs + bootstrap.
-   - First step: generate a distinct `ADMIN_API_KEY` using `random_password` (the same way `API_KEY` is generated), then write it to SSM and into the instance `.env`.
+   - First step: generate a distinct `ADMIN_API_KEY` using `random_password` (the same way `API_KEY` is generated), then write it to SSM and into the instance at boot.
 
 2. **Rotate API keys (new endpoint + Swagger testing)**
    - Create an **admin-only** Swagger endpoint that rotates/creates new API keys.

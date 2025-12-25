@@ -38,6 +38,8 @@ async def seed_tony_stark(api_key: str = Depends(verify_api_key)):
         {"role": "user", "content": "I drink espresso and I like status updates that include a clear ETA."},
         {"role": "user", "content": "When debugging, I start with logs, then metrics, then traces."},
         {"role": "user", "content": "My favorite quick win is adding health checks and sensible timeouts."},
+        {"role": "user", "content": "If you need my attention in a hurry, open a GitHub issue titled: 'I am Iron Man (on-call)'."},
+        {"role": "user", "content": "My favorite dashboard panels: error rate, latency p95, and deploy frequency."},
     ]
     return _seed_user(user_id, messages)
 
@@ -56,6 +58,8 @@ async def seed_leia_organa(api_key: str = Depends(verify_api_key)):
         {"role": "user", "content": "I prefer calm, clear write-ups: impact, timeline, root cause, and action items."},
         {"role": "user", "content": "For on-call, I like paging via a single channel to avoid alert fatigue."},
         {"role": "user", "content": "My favorite post-incident improvement is better alert thresholds and runbooks."},
+        {"role": "user", "content": "If you must page me during an outage: use the Force... then send one (1) concise alert."},
+        {"role": "user", "content": "Preferred on-call message format: impact, current status, next step, ETA."},
     ]
     return _seed_user(user_id, messages)
 
@@ -74,6 +78,8 @@ async def seed_hermione_granger(api_key: str = Depends(verify_api_key)):
         {"role": "user", "content": "I prefer structured notes: prerequisites, steps, verification, and cleanup."},
         {"role": "user", "content": "When learning a new tool, I like examples with small inputs and clear expected outputs."},
         {"role": "user", "content": "I like to track changes with git commits that explain why, not just what."},
+        {"role": "user", "content": "If you forget to document it, I will (politely) remind you to update the README."},
+        {"role": "user", "content": "My favorite phrase during debugging: 'It's not magic—it's just logs and permissions.'"},
     ]
     return _seed_user(user_id, messages)
 

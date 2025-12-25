@@ -304,3 +304,48 @@ Notes:
      - `user_id="hermione_granger_001"`, query: `What kind of instructions does Hermione prefer?`
 3. **Why vectors matter**
    - Compare a keyword-y query vs a rephrased query and notice search still finds the right memory.
+
+### More example queries (smart + cheeky)
+
+Run these via `POST /v1/memories/search` with the matching `user_id`:
+
+**Tony (`tony_stark_001`)**
+
+- Smart:
+  - `What is Tony’s preferred paging order?`
+  - `What CI tool does Tony use?`
+  - `What does Tony check first when debugging?`
+  - `What dashboard panels does Tony care about?`
+- Cheeky:
+  - `How do I get Tony’s attention fast?` (should match the “I am Iron Man (on-call)” issue title)
+  - `Does Tony run on coffee or espresso?`
+
+**Leia (`leia_organa_001`)**
+
+- Smart:
+  - `How often does Leia want outage updates?`
+  - `What does Leia want in an on-call message?`
+  - `What does Leia require before applying Terraform in prod?`
+  - `Which SLO metrics does Leia watch?`
+- Cheeky:
+  - `How do I page Leia during an outage?` (should match “use the Force... then send one concise alert”)
+  - `Does Leia like alert storms?` (should match “single channel / avoid alert fatigue”)
+
+**Hermione (`hermione_granger_001`)**
+
+- Smart:
+  - `What kind of instructions does Hermione prefer?`
+  - `What is Hermione’s troubleshooting order?`
+  - `What does Hermione want in docs?`
+  - `What does Hermione want in git commits?`
+- Cheeky:
+  - `What happens if I forget to update the README?`
+  - `Is this magic or permissions?` (should match “It's not magic—it's just logs and permissions.”)
+
+### Challenge mode (try to “trick” the search)
+
+These should still work even though they don’t match exact wording:
+
+- Tony: `Make the runbook fast. What format does Tony want?`
+- Leia: `Keep me posted. How frequently?`
+- Hermione: `Give me reproducible steps, not vibes. What’s her preference?`

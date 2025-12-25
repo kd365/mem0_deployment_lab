@@ -1,6 +1,6 @@
 # Infrastructure (Terraform)
 
-This repo includes an **optional Terraform deployment** that can provision all AWS resources needed to run the Mem0 stack on EC2.
+This repo includes a **Terraform deployment** that provisions the AWS resources needed to run the Mem0 stack on EC2.
 
 ## Start Here
 
@@ -17,17 +17,17 @@ This repo includes an **optional Terraform deployment** that can provision all A
   - Always: permissions to read SSM parameters used for `.env`
   - Optional (AWS-only track): permissions to invoke **AWS Bedrock**
 
-## Provider Choice (OpenAI vs AWS Bedrock)
+## Provider Choice (AWS Bedrock vs OpenAI optional)
 
 Terraform supports two modes:
 
-- **Default track (OpenAI)**
-  - Uses `OPENAI_API_KEY`
-  - `LLM_PROVIDER=openai`, `EMBEDDER_PROVIDER=openai`
-- **AWS-only track (Bedrock + Titan embeddings)**
-  - Uses IAM role (recommended) or AWS keys
+- **Default track (AWS Bedrock + Titan)**
+  - Uses the EC2 instance IAM role (recommended)
   - `LLM_PROVIDER=aws_bedrock`, `EMBEDDER_PROVIDER=aws_bedrock`
   - `EMBEDDER_MODEL=amazon.titan-embed-text-v1`
+- **Optional track (OpenAI)**
+  - Uses `OPENAI_API_KEY`
+  - `LLM_PROVIDER=openai`, `EMBEDDER_PROVIDER=openai`
 
 ## Important Notes (Teaching-friendly)
 

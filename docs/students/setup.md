@@ -43,98 +43,19 @@ terraform output -raw api_key
 terraform output -raw admin_api_key
 ```
 
-### Quick verification (no scripts)
+### Use Swagger (this is the lab)
 
-From your laptop (recommended), use the Terraform outputs:
+- Open the Swagger URL from Terraform output: `terraform output -raw swagger_url`
+- Click **Authorize**
+- Paste:
+  - `terraform output -raw api_key` into **X-API-Key**
+  - `terraform output -raw admin_api_key` into **X-Admin-Key**
 
-```bash
-API_BASE_URL=$(cd infra/terraform && terraform output -raw api_base_url)
-API_KEY=$(cd infra/terraform && terraform output -raw api_key)
+Then run:
 
-curl -s "${API_BASE_URL}/health" | python3 -m json.tool
-
-# Seed fun demo users (no request body)
-curl -s -X POST "${API_BASE_URL}/v1/demo/seed/tony-stark" -H "X-API-Key: ${API_KEY}" | python3 -m json.tool
-curl -s -X POST "${API_BASE_URL}/v1/demo/seed/leia-organa" -H "X-API-Key: ${API_KEY}" | python3 -m json.tool
-curl -s -X POST "${API_BASE_URL}/v1/demo/seed/hermione-granger" -H "X-API-Key: ${API_KEY}" | python3 -m json.tool
-```
-
----
-
-## Path B (Optional): Manual Docker on EC2
-
-Use this if you want students to practice Docker setup steps, or if Terraform isn’t available.
-
-### 1) SSH to the instance
-
-```bash
-ssh -i your-key.pem ec2-user@YOUR_EC2_IP
-```
-
-### 2) Install Docker (Amazon Linux 2023)
-
-```bash
-sudo dnf update -y
-sudo dnf install -y docker
-sudo systemctl enable --now docker
-sudo usermod -aG docker ec2-user
-docker --version
-```
-
-Log out/in so group changes take effect.
-
-### 3) Get the repo and create `.env`
-
-```bash
-git clone YOUR_REPO_URL mem0_deployment_lab
-cd mem0_deployment_lab
-cp .env.template .env
-openssl rand -hex 32   # generate API_KEY
-nano .env
-```
-
-Default lab config (AWS Bedrock):
-
-- `LLM_PROVIDER=aws_bedrock`
-- `EMBEDDER_PROVIDER=aws_bedrock`
-- `AWS_REGION=...`
-- `EMBEDDER_MODEL=amazon.titan-embed-text-v1`
-- `LLM_MODEL=...`
-
-### 4) Build + run
-
-```bash
-sudo docker build -t mem0_api:latest -f deployment/Dockerfile .
-sudo docker network create mem0_network
-
-sudo docker run -d \
-  --name mem0_qdrant \
-  --network mem0_network \
-  -p 6333:6333 \
-  -v qdrant_data:/qdrant/storage \
-  --restart unless-stopped \
-  qdrant/qdrant:latest
-
-sudo docker run -d \
-  --name mem0_api \
-  --network mem0_network \
-  -p 8000:8000 \
-  --env-file .env \
-  -e QDRANT_HOST=mem0_qdrant \
-  --restart unless-stopped \
-  mem0_api:latest
-```
-
-### 5) Verify + test
-
-```bash
-curl http://localhost:8000/health
-export API_KEY=$(grep '^API_KEY=' .env | cut -d'=' -f2)
-```
-
-Open Swagger:
-
-- `http://YOUR_EC2_IP:8000/docs`
+- `POST /v1/demo/seed/tony-stark`
+- `POST /v1/demo/seed/leia-organa`
+- `POST /v1/demo/seed/hermione-granger`
 
 ---
 

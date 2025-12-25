@@ -69,7 +69,7 @@ variable "repo_ref" {
 variable "ai_mode" {
   type        = string
   description = "AI provider mode: openai | aws"
-  default     = "openai"
+  default     = "aws"
   validation {
     condition     = contains(["openai", "aws"], var.ai_mode)
     error_message = "ai_mode must be one of: openai, aws"
@@ -102,13 +102,13 @@ variable "aws_region_runtime" {
 variable "embedder_model" {
   type        = string
   description = "Embedding model. For Bedrock Titan: amazon.titan-embed-text-v1. For OpenAI: text-embedding-3-small."
-  default     = "text-embedding-3-small"
+  default     = "amazon.titan-embed-text-v1"
 }
 
 variable "llm_model" {
   type        = string
   description = "LLM model id. For OpenAI: gpt-4o-mini. For Bedrock: e.g. anthropic.claude-3-5-sonnet-20240620-v1:0"
-  default     = "gpt-4o-mini"
+  default     = "anthropic.claude-3-5-sonnet-20240620-v1:0"
 }
 
 variable "llm_temperature" {

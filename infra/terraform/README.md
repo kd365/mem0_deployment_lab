@@ -8,7 +8,7 @@ Goal: students can clone this repo, edit a small `terraform.tfvars`, run `terraf
   - `aws configure` (Access Key + Secret)
   - AWS SSO / assumed role
 - Terraform installed (v1.5+ recommended)
-- An existing EC2 key pair for SSH (optional, but recommended)
+- SSH key pair is optional (leave `ssh_key_name` blank for the lab)
 
 ## Quick Start
 
@@ -54,7 +54,7 @@ terraform output -raw admin_api_key
   - writes `.env`
   - starts Qdrant + API containers (no Docker Compose required)
 
-## Provider Modes (AWS-first vs OpenAI optional)
+## Provider Modes (AWS default vs OpenAI optional)
 
 ### Mode A (Default): AWS Bedrock (Titan embeddings + Bedrock LLM)
 
@@ -81,8 +81,8 @@ Credentials:
 - `project_name` (used for resource naming)
 - `aws_region`
 - `instance_type`
-- `allowed_ssh_cidr` (your IP)
-- `ai_mode` (`openai` or `aws`)
+- `allowed_ssh_cidr` (only if you enable SSH)
+- `ai_mode` (`aws` or `openai`)
 
 ## Example tfvars
 

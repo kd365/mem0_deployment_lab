@@ -27,10 +27,9 @@ api_port = 8000
 # AI provider mode
 # - "openai": use OpenAI for embeddings + LLM
 # - "aws":    use AWS Bedrock (Titan embeddings + Bedrock LLM)
-ai_mode = "openai"
+ai_mode = "aws"
 
-# OpenAI (required if ai_mode = "openai")
-# Leave blank for ai_mode="aws"
+# OpenAI (only required if ai_mode = "openai")
 openai_api_key = ""
 openai_base_url = ""                    # optional
 

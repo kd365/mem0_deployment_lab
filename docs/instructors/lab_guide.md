@@ -27,7 +27,7 @@ By the end of this lab, students will be able to:
 ### Part 1: Environment Setup (20 min)
 
 - Deploy with Terraform (recommended)
-- (Optional) SSH to EC2 to observe containers/logs
+- Instructor-only: if troubleshooting is needed, you can enable SSH in Terraform and then observe containers/logs
 
 ### Part 2: Configuration (10 min)
 
@@ -41,9 +41,8 @@ By the end of this lab, students will be able to:
 
 ### Part 4: Testing & Exploration (25 min)
 
-- Run test script
-- Use Swagger UI
-- Test with curl/Postman
+- Use Swagger UI (primary workflow)
+- (Optional) Show that Swagger is just authenticated HTTP requests (curl/Postman) after the lab
 - Understand API responses
 
 ### Part 5: Integration Discussion (10 min)
@@ -134,8 +133,8 @@ sudo docker ps
 ### Checkpoint 5: Health Check Pass
 
 ```bash
-curl http://localhost:8000/health
-# Should return {"status": "healthy", ...}
+# Students should use Terraform output to open Swagger and verify /health there:
+# terraform output -raw swagger_url
 ```
 
 ---
@@ -244,7 +243,6 @@ sudo docker system prune -a
 
 ### Materials Needed
 
-- EC2 SSH keys (one per student)
 - This repository URL or zip file
 - AWS account access with Bedrock enabled (and model access granted)
 - Projected screen for demos

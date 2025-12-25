@@ -40,6 +40,14 @@ async def seed_tony_stark(api_key: str = Depends(verify_api_key)):
         {"role": "user", "content": "My favorite quick win is adding health checks and sensible timeouts."},
         {"role": "user", "content": "If you need my attention in a hurry, open a GitHub issue titled: 'I am Iron Man (on-call)'."},
         {"role": "user", "content": "My favorite dashboard panels: error rate, latency p95, and deploy frequency."},
+        {"role": "user", "content": "I prefer incident channels with a single thread and one owner. Too many cooks, burnt prod."},
+        {"role": "user", "content": "My alert philosophy: one loud page for a real incident, not 47 gentle pings."},
+        {"role": "user", "content": "If a deploy breaks prod, I want a rollback in under 5 minutes and a postmortem by end of day."},
+        {"role": "user", "content": "I like Terraform plans that read like a story: small diffs, clear naming, no surprises."},
+        {"role": "user", "content": "I name dashboards like suits: 'Mark-1 Latency', 'Mark-2 Errors', and 'Mark-3 Saturation'."},
+        {"role": "user", "content": "Preferred incident summary format: what happened, impact, fix, follow-ups. Keep it tight."},
+        {"role": "user", "content": "I prefer Python scripts that are small, fast, and have a --help that actually helps."},
+        {"role": "user", "content": "If you ask me to read YAML during an outage, bring espresso."},
     ]
     return _seed_user(user_id, messages)
 
@@ -60,6 +68,14 @@ async def seed_leia_organa(api_key: str = Depends(verify_api_key)):
         {"role": "user", "content": "My favorite post-incident improvement is better alert thresholds and runbooks."},
         {"role": "user", "content": "If you must page me during an outage: use the Force... then send one (1) concise alert."},
         {"role": "user", "content": "Preferred on-call message format: impact, current status, next step, ETA."},
+        {"role": "user", "content": "I prefer announcements that are honest and steady: no drama, just facts and next steps."},
+        {"role": "user", "content": "My rule for incident comms: if users are impacted, we communicate early and often."},
+        {"role": "user", "content": "I like change management: deploy windows, rollback plans, and a clear owner."},
+        {"role": "user", "content": "If monitoring is noisy, we tune alerts. Alert fatigue is the path to the dark side."},
+        {"role": "user", "content": "I prefer runbooks that start with verification, then mitigation, then deeper debugging."},
+        {"role": "user", "content": "My favorite metric is error budget burn rate. It keeps priorities honest."},
+        {"role": "user", "content": "If you page me, include: what broke, who is impacted, and what you need from me."},
+        {"role": "user", "content": "I like incident retrospectives that end with owners and deadlines, not vibes."},
     ]
     return _seed_user(user_id, messages)
 
@@ -80,6 +96,14 @@ async def seed_hermione_granger(api_key: str = Depends(verify_api_key)):
         {"role": "user", "content": "I like to track changes with git commits that explain why, not just what."},
         {"role": "user", "content": "If you forget to document it, I will (politely) remind you to update the README."},
         {"role": "user", "content": "My favorite phrase during debugging: 'It's not magic—it's just logs and permissions.'"},
+        {"role": "user", "content": "I prefer code reviews that include: what changed, why, risks, and how to rollback."},
+        {"role": "user", "content": "My preferred formatting: consistent names, clear comments, and no mystery variables."},
+        {"role": "user", "content": "If a command is dangerous, I want it wrapped with confirmation and a clear warning."},
+        {"role": "user", "content": "I like tests that fail loudly and tell you exactly what to fix."},
+        {"role": "user", "content": "I keep a personal runbook: 'Check IAM permissions' is always near the top."},
+        {"role": "user", "content": "I prefer writing down assumptions before debugging. Most outages start as assumptions."},
+        {"role": "user", "content": "If someone says 'it works on my machine', my next question is 'what machine?'"}, 
+        {"role": "user", "content": "I like Terraform variables with validation blocks. Guardrails are good engineering."},
     ]
     return _seed_user(user_id, messages)
 

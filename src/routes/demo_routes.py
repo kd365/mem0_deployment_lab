@@ -60,6 +60,7 @@ async def seed_leia_organa(api_key: str = Depends(verify_api_key)):
     messages = [
         {"role": "user", "content": "My name is Leia Organa. During an outage, I want steady 'mission briefings' every 15 minutes."},
         {"role": "user", "content": "Preferred on-call message format: impact, current status, next step, ETA."},
+        {"role": "user", "content": "If you must page me during an outage: use the Force... then send one (1) concise alert."},
         {"role": "user", "content": "I like dashboards with SLOs: p95 latency, error rate, saturation, and error budget burn rate."},
         {"role": "user", "content": "I use AWS and I want Terraform plans reviewed before apply in production. Treat changes like mission plans."},
         {"role": "user", "content": "For paging, I prefer a single channel. Alert fatigue is how you lose the war."},

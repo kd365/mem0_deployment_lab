@@ -19,7 +19,9 @@ Open Swagger UI:
 Click **Authorize** and set:
 
 - **X-API-Key**: your `API_KEY`
-- **X-Admin-Key**: only needed for `/admin/*` endpoints (you can set it to the same value as `API_KEY` if you didn’t configure a separate admin key)
+- **X-Admin-Key**: only needed for `/admin/*` endpoints
+  - If you didn’t configure a separate admin key, it will be the **same value** as `API_KEY`.
+  - If you want it to be different, set `admin_api_key` in Terraform (or modify Terraform to auto-generate a distinct admin key).
 
 ### Where is my API key?
 
@@ -33,24 +35,27 @@ terraform output -raw api_key
 terraform output -raw admin_api_key
 ```
 
-- **Manual setup**: it’s in your `.env` file on the EC2 instance:
+---
 
-```bash
-grep '^API_KEY=' .env
-```
+## How `infer` works (the important part)
 
-- **Terraform (alternative)**: it’s stored in SSM Parameter Store (AWS CLI):
+Mem0 can store memories in two ways:
 
-```bash
-aws ssm get-parameter --with-decryption \
-  --name "/<project_name>/API_KEY" \
-  --region <aws_region> \
-  --query Parameter.Value --output text
-```
+- **`infer=false` (deterministic, lab-friendly)**:
+  - Think: **INSERT INTO**.
+  - We store the provided messages as memories (still embedded for semantic search).
+  - Great for demos and testing because you know exactly what got stored.
+
+- **`infer=true` (LLM-driven “memory extraction”)**:
+  - Think: “read the conversation, extract durable facts, then write the right changes.”
+  - Mem0 uses an **LLM** to:
+    - extract candidate facts (expects JSON like `{"facts":[...]}`)
+    - decide actions per fact: add/update/delete/none
+  - Useful when you want “clean” memories (preferences + stable facts), not raw chat logs.
 
 ---
 
-## Core Endpoints
+## Core Swagger Endpoints (API)
 
 ### Health Check
 
@@ -80,6 +85,16 @@ X-API-Key: YOUR_KEY
 ```
 
 **Tip (Labs):** set `"infer": false` to **force storing** the message as a memory so `get-all`/`search` are deterministic.
+
+### Try both modes (in Swagger)
+
+1) Add with `infer=false` (stores the message as-is)
+2) Add with `infer=true` (LLM extracts durable facts; you may see fewer, cleaner memories)
+
+Then compare results with:
+
+- `POST /v1/memories/get-all`
+- `POST /v1/memories/search`
 
 ---
 
@@ -279,10 +294,15 @@ const searchMemory = async () => {
 
 ---
 
-## Demo: Seed 3 Users (Pop Culture)
+## Demo: Seed 3 Fictional Users
 
-These endpoints add a bunch of memories so search results are meaningful.
+These endpoints just add a bunch of memories to the database so search results are more abundant.  
 They use `infer=false` for deterministic seeding.
+
+Analogy:
+
+- `infer=false` is like **INSERT INTO** (you provide the data and it gets stored)
+- `infer=true` is like “LLM → extract facts → decide actions → write changes”
 
 - `POST /v1/demo/seed/tony-stark`
 - `POST /v1/demo/seed/leia-organa`

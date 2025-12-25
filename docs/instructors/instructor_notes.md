@@ -174,11 +174,21 @@ From the AWS Console:
    - Add CloudWatch metrics/dashboards (CPU, disk, memory, container logs) and document what “healthy” looks like.
    - (Stretch) wire alerts into Slack.
 3. **API / Swagger refactor**
-   - Add a new endpoint (e.g., “rotate API keys”) or refactor request/response shapes and update docs.
+   - Add a new endpoint or refactor request/response shapes and update docs.
 4. **Separate API key vs Admin key**
    - Change Terraform to generate two distinct keys by default and update outputs + bootstrap.
 5. **Data-minded extension**
    - Export `/admin/all-memories` results to a CSV and create a small analysis notebook (top topics, per-user counts, growth over time). Or even better write the Python Machine Learning logic into the API and return the results.
+6. **Rotate API keys (new endpoint + Swagger testing)**
+   - Create an **admin-only** Swagger endpoint that rotates/creates new API keys.
+   - Suggested shape: `POST /admin/keys/rotate` (requires `X-Admin-Key`)
+   - Requirements (keep it simple for a bootcamp assignment):
+     - returns the new key(s) in the response
+     - after rotation, old keys should no longer work
+     - update docs with how to use it from Swagger
+   - Design choice (students explain tradeoffs):
+     - **Easy mode**: rotate keys in-memory (works until the container restarts)
+     - **Real mode**: write the new key into **SSM Parameter Store** and restart/reload the API so it takes effect
 
 ## Common Questions
 
@@ -211,13 +221,6 @@ Default (Terraform):
 ```bash
 cd infra/terraform
 terraform destroy
-```
-
-Optional (manual Docker path only):
-
-```bash
-sudo docker stop mem0_api mem0_qdrant
-sudo docker rm mem0_api mem0_qdrant
 ```
 
 ## Cost

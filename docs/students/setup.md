@@ -61,11 +61,10 @@ Then run:
 
 ## Optional Provider Track: OpenAI
 
-If you want to use OpenAI instead of Bedrock, set in `.env`:
+If you want to use OpenAI instead of Bedrock, set in **Terraform** (`infra/terraform/terraform.tfvars`):
 
-- `LLM_PROVIDER=openai`
-- `EMBEDDER_PROVIDER=openai`
-- `OPENAI_API_KEY=...`
+- `ai_mode = "openai"`
+- `openai_api_key = "..."` (required)
 
 Everything else stays the same.
 

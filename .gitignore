@@ -1,7 +1,6 @@
 # Environment variables
 .env
 *.env
-!.env.template
 !env_template.txt
 
 # Local-only docs (not committed)

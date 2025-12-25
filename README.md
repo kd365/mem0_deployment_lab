@@ -56,7 +56,6 @@ mem0_deployment_lab/
 ├── src/                  # FastAPI application
 ├── deployment/           # Docker configuration
 ├── requirements.txt      # Python dependencies
-├── .env.template         # Reference env template (Terraform writes the instance .env from SSM)
 └── infra/                # Terraform + infra docs
 ```
 

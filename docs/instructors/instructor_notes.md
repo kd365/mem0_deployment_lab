@@ -249,7 +249,7 @@ Class of 30: ~$3.00 total
 - README.md (overview)
 - docs/students/setup.md (deployment steps)
 - docs/students/api.md (endpoint reference)
-- All code files (src/, deployment/, requirements.txt, .env.template)
+- All code files (src/, deployment/, requirements.txt)
 
 ## Files YOU Need
 

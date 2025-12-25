@@ -42,6 +42,7 @@ terraform output -raw admin_api_key
 Mem0 can store memories in two ways:
 
 - **`infer=false` (deterministic, lab-friendly)**:
+
   - Think: **INSERT INTO**.
   - We store the provided messages as memories (still embedded for semantic search).
   - Great for demos and testing because you know exactly what got stored.
@@ -88,8 +89,8 @@ X-API-Key: YOUR_KEY
 
 ### Try both modes (in Swagger)
 
-1) Add with `infer=false` (stores the message as-is)
-2) Add with `infer=true` (LLM extracts durable facts; you may see fewer, cleaner memories)
+1. Add with `infer=false` (stores the message as-is)
+2. Add with `infer=true` (LLM extracts durable facts; you may see fewer, cleaner memories)
 
 Then compare results with:
 

@@ -171,6 +171,7 @@ From the AWS Console:
 #### Required (do these in order)
 
 1. **Separate API key vs Admin key**
+
    - Change Terraform to generate **two distinct keys by default** and update outputs + bootstrap.
    - First step: generate a distinct `ADMIN_API_KEY` using `random_password` (the same way `API_KEY` is generated), then write it to SSM and into the instance `.env`.
 
@@ -188,15 +189,18 @@ From the AWS Console:
 #### Optional (pick any 2 — SSM-first does NOT count toward the 2)
 
 1. **Monitoring (Qdrant → CloudWatch dashboard)**
+
    - Send Qdrant metrics to **CloudWatch** and build a dashboard.
    - Make it “vector DB-specific” (not just CPU/RAM): things like collection size / point count growth, search request latency, and vector index behavior (what you graph will depend on what Qdrant exposes).
    - Implementation hint: Qdrant exposes Prometheus-style metrics; students can scrape them and publish to CloudWatch (multiple valid approaches).
    - (Stretch) wire alerts into Slack.
 
 2. **API / Swagger refactor**
+
    - Add a new endpoint or refactor request/response shapes and update docs.
 
 3. **Data-minded extension**
+
    - Export `/admin/all-memories` results to a CSV and create a small analysis notebook (top topics, per-user counts, growth over time). Or combine this with one of the other assignments.
 
 4. **SSM-first secrets (bonus / optional, does not count toward the “pick any 2”)**

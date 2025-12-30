@@ -136,13 +136,9 @@ variable "ai_mode" {
 
 variable "openai_api_key" {
   type        = string
-  description = "OpenAI API key (required when ai_mode=openai)."
+  description = "OpenAI API key (required when ai_mode=openai). Runtime validation in dependencies.py will catch missing keys."
   default     = ""
   sensitive   = true
-  validation {
-    condition     = var.ai_mode != "openai" || length(trimspace(var.openai_api_key)) > 0
-    error_message = "openai_api_key must be set when ai_mode = \"openai\"."
-  }
 }
 
 variable "openai_base_url" {

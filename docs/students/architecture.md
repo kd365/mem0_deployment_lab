@@ -51,7 +51,7 @@ When you add a memory like "Riley prefers SMS after 8pm while on-call", Mem0:
 
 **Why vectors?** So we can find semantically similar memories:
 
-- Query: "What food does the user like?"
+- Query: "What Pager Duty notifications does Riley prefer?"
 - Matches: "Riley prefers SMS after 8pm while on-call" (even if the query uses different wording)
 
 ### 2. Memory Extraction / Memory Actions (Optional but recommended)

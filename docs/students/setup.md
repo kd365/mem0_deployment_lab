@@ -72,6 +72,7 @@ You can copy and paste this directly into your terminal to connect to the EC2 in
 
 ### Use Swagger (this is the exploration part of the lab)
 
+
 - Open the Swagger URL from Terraform output: `terraform output -raw swagger_url`
 - Click **Authorize**
 - Paste:

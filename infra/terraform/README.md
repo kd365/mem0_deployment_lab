@@ -21,6 +21,8 @@ terraform init
 terraform apply
 ```
 
+**About `.terraform.lock.hcl`**: This is Terraform's dependency lock file that ensures consistent provider versions across all students. It's committed to the repo and should not be deleted.
+
 Note: after `terraform apply`, the EC2 instance boots via `user_data` and the API may take **a few minutes** before `swagger_url` is reachable.
 
 After apply, Terraform outputs:
@@ -28,6 +30,8 @@ After apply, Terraform outputs:
 - `api_base_url`
 - `swagger_url`
 - `ec2_public_ip`
+- `ssh_command` (ready-to-use SSH command with your key pair)
+- `ssh_command_ip` (SSH using IP instead of DNS)
 - (sensitive) `api_key` and `admin_api_key` (recommended for Swagger testing)
 
 ## Get the Swagger API Key (Recommended)
@@ -37,6 +41,12 @@ After `terraform apply`:
 ```bash
 terraform output -raw api_key
 terraform output -raw admin_api_key
+```
+
+**SSH Access**: Get a ready-to-use SSH command:
+
+```bash
+terraform output -raw ssh_command
 ```
 
 Tip: if you only need the admin key, you can run:

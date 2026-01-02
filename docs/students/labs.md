@@ -1,12 +1,12 @@
-# Team Assignments
+# Lab Extensions
 
 Prev: [`api.md`](api.md) • Optional reading: [`architecture.md`](architecture.md)
 
-**Note:** The in-class lab is **individual work**. These assignments are **team-based** (3-4 students per team).
+**Note:** All labs are **in-class**. Some are individual work, some are team-based (3-4 students per team).
 
 ---
 
-## Part 1: Individual Assignments
+## Part 1: Individual Labs
 
 Complete these on your own deployment:
 
@@ -81,7 +81,7 @@ Move secrets out of `terraform.tfvars` and into SSM created out-of-band (AWS CLI
 
 ---
 
-## Part 3: Team CI/CD Extension (Required)
+## Part 3: Team CI/CD Lab (Required)
 
 **Team size:** 3-4 students
 
@@ -234,4 +234,4 @@ If you finish early:
 
 ---
 
-**Ready to start?** Form your teams and begin with the CI/CD extension!
+**Ready to start?** Form your teams and begin with the CI/CD lab!

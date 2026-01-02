@@ -367,10 +367,14 @@ Run these via `POST /v1/memories/search` with the matching `user_id`:
   - `Is this "magic" or is it configs/logs/permissions?` (should match her “rarely magic” preference)
   - `Does Hermione tolerate "final_final_v3" filenames?`
 
-### Challenge mode (try to “trick” the search)
+### Challenge mode (try to "trick" the search)
 
-These should still work even though they don’t match exact wording:
+These should still work even though they don't match exact wording:
 
 - Tony: `Make the runbook fast. What format does Tony want?`
 - Leia: `Keep me posted. How frequently?`
-- Hermione: `Give me reproducible steps, not vibes. What’s her preference?`
+- Hermione: `Give me reproducible steps, not vibes. What's her preference?`
+
+---
+
+**Lab Complete!** Next: [`labs.md`](labs.md) (extension labs) • Optional reading: [`architecture.md`](architecture.md)

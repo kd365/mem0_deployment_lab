@@ -1,6 +1,6 @@
 # Student Guide (Start Here)
 
-## Labs (All In-Class)
+## Labs
 
 1. **Deploy**: [`setup.md`](setup.md) - Deploy your own Mem0 stack on AWS
 2. **Test / Swagger**: [`api.md`](api.md) - Test the API using Swagger UI

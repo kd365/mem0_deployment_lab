@@ -83,8 +83,6 @@ Move secrets out of `terraform.tfvars` and into SSM created out-of-band (AWS CLI
 
 ## Part 3: Team CI/CD Extension (Required)
 
-**Duration:** 1 day (in-class or homework)
-
 **Team size:** 3-4 students
 
 Build a GitHub Actions CI/CD pipeline as a team.
@@ -179,15 +177,18 @@ jobs:
 ### Deliverables
 
 1. GitHub repo with:
+
    - `.github/workflows/*.yml` file(s)
    - Branch protection enabled
    - All team members have commits
 
 2. GitHub Project board:
+
    - All Issues in "Done"
    - Clear task history
 
 3. At least 3-5 Pull Requests:
+
    - Code review on each PR
    - CI checks passing
 
@@ -196,26 +197,6 @@ jobs:
    - Challenges faced
    - How you divided the work
    - What you'd automate next
-
-### Grading (50 points)
-
-- **GitHub Actions Workflow** (25 pts):
-  - Workflow file exists and is valid (5 pts)
-  - Runs on PRs automatically (5 pts)
-  - Includes 2+ meaningful checks (10 pts)
-  - Workflow runs and passes (5 pts)
-
-- **Team Collaboration** (15 pts):
-  - Project board set up (3 pts)
-  - Issues created and assigned (3 pts)
-  - All members have commits (3 pts)
-  - PRs used (not direct commits) (3 pts)
-  - Code reviews visible (3 pts)
-
-- **Documentation** (10 pts):
-  - Write-up explains automation (5 pts)
-  - Includes challenges/learnings (3 pts)
-  - Docs updated (2 pts)
 
 ### Stretch Goals
 

@@ -2,7 +2,9 @@
 
 Self-hosted memory layer with FastAPI + Qdrant vector database
 
-> **Lab Objective:** Deploy a production-ready AI memory API on AWS (Bedrock + Titan + Qdrant) in ~30 minutes
+> **Lab Objective:** Deploy a production-ready AI memory API on AWS (Bedrock + Titan + Qdrant)
+>
+> **In-class:** Individual deployment (~30 min) | **After class:** Team CI/CD assignment (3-4 students)
 
 ---
 

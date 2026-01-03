@@ -244,7 +244,7 @@ try:
         metrics_collector, 
         alert_manager, 
         log_structured,
-        OpenAITracker
+        
     )
     from business_intelligence import BusinessIntelligence
     OBSERVABILITY_ENABLED = True
